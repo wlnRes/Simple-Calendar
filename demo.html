@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        html,body {
+            width: 100%;
+            height: 100%;
+        }
+        *{
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            padding: 30px;
+        }
+        .box {
+            width: 100%;
+            height: 100%;
+            border: 5px solid #ccc;
+        }
+        .a {
+            display: inline-block;
+            width: 20px;
+            position: absolute;
+            top: 100px;
+            left: 100px;
+            z-index: 99;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="box" id="box">
+        <canvas id="canvas" width="1000px" height="500px">
+        </canvas>
+    </div>
+    <script>
+        function getLenPx(str, font_size) {
+            const str_leng = str.replace(/[^\x00-\xff]/gi, 'aa').length;
+            return str_leng * font_size / 2
+        }
+        window.onload = function(){
+            const box = document.getElementById('box');
+            const canvasBox = document.getElementById("canvas");
+            canvasBox.setAttribute('width',`${box.clientWidth}px`)
+            canvasBox.setAttribute('height',`${box.clientHeight}px`)
+            const ctx = canvasBox.getContext("2d");
+            init();
+
+            function init(){
+                let centerY = box.clientHeight / 2;
+                let anW = 20;
+                let singleW = (box.clientWidth - anW * 2) / 20;
+                let lines = [
+                    { x: anW,  y: centerY },
+                    { x: singleW + anW, y: centerY - 200 },
+                    { x: 9*singleW + anW, y: centerY - 200 },
+                    { x: 10*singleW + anW, y: centerY },
+                    { x: 11*singleW + anW, y: centerY - 100 },
+                    { x: 15*singleW + anW, y: centerY - 100 },
+                    { x: 16*singleW + anW, y: centerY },
+                    { x: 17*singleW + anW, y: centerY - 50 },
+                    { x: 19*singleW + anW, y: centerY - 50 },
+                    { x: 20*singleW + anW, y: centerY },
+                ];
+                let linesBottom = [
+                    { x: anW,  y: centerY },
+                    { x: singleW + anW, y: centerY - 200 },
+                    { x: 9*singleW + anW, y: centerY - 200 },
+                    { x: 10*singleW + anW, y: centerY },
+                    { x: 11*singleW + anW, y: centerY - 100 },
+                    { x: 19*singleW + anW, y: centerY - 100 },
+                    { x: 20*singleW + anW, y: centerY },
+                ];
+                ctx.lineJoin = 'round'
+                ctx.lineWidth = 2;
+                ctx.font = '12px Times';
+                ctx.beginPath();
+                ctx.strokeStyle='orange'
+                ctx.moveTo(lines[0].x, lines[0].y);
+                for (var i = 1; i < lines.length; i++) {
+                    let end = lines[i];
+                    ctx.lineTo(end.x, end.y);
+                };
+                const Alength=getLenPx('报建线A',12)
+                ctx.fillText('报建线A',lines[1].x-Alength/2,lines[1].y-8)
+                ctx.stroke();
+                // 绘制圆点
+                //竖版文字
+                let firstTextArr = [
+                    '流程甲','流程乙','流程丙','流程哈哈','流程一二三',
+                ];
+
+                for(let i = 0;i < 15;i++){
+                    ctx.beginPath();
+                    ctx.arc(anW + (i+3)*singleW / 2,centerY-200, 5, 0, 2 * Math.PI, false);
+                    ctx.fillStyle = '#000';
+                    ctx.fill();
+                    ctx.beginPath();
+                    ctx.arc(anW + (i+3)*singleW / 2,centerY-200, 3, 0, 2 * Math.PI, false);
+                    ctx.fillStyle = '#fff';
+                    ctx.fill();
+                    if(firstTextArr[i]){
+                        let len = firstTextArr[i].length;
+                        let str = firstTextArr[i];
+                        for(let j = 0;j<len;j++){
+                            ctx.fillStyle = 'blue';
+                            ctx.font = '10px Times';
+                            ctx.lineHeight='10px'
+                            ctx.fillText(str.charAt(j),anW + (i+3)*singleW / 2 - 5,centerY-200-(len-j)*14);
+                        }
+                        ctx.fillText('A701',anW + (i+3)*singleW / 2 - 5,centerY-200 +18,28);
+                        ctx.fillText('A701',anW + (i+3)*singleW / 2 - 5,centerY-200 +18+14,28);
+                    }
+                    // ctx.beginPath();
+                    // // ctx.arc(anW + (i+3)*singleW / 2,centerY-200);
+                }
+                for(let i = 0;i < 7;i++){
+                    ctx.beginPath();
+                    ctx.arc(anW + (i+23)*singleW / 2,centerY-100, 5, 0, 2 * Math.PI, false);
+                    ctx.fillStyle = '#000';
+                    ctx.fill();
+                    ctx.beginPath();
+                    ctx.arc(anW + (i+23)*singleW / 2,centerY-100, 3, 0, 2 * Math.PI, false);
+                    // ctx.fillStyle = 'red';
+                    ctx.fill();
+                }
+                for(let i = 0;i < 3;i++){
+                    ctx.beginPath();
+                    ctx.arc(anW + (i+35)*singleW / 2,centerY-50, 5, 0, 2 * Math.PI, false);
+                    ctx.fillStyle = '#000';
+                    ctx.fill();
+                    ctx.beginPath();
+                    ctx.arc(anW + (i+35)*singleW / 2,centerY-50, 3, 0, 2 * Math.PI, false);
+                    // ctx.fillStyle = 'red';
+                    ctx.fill();
+                }
+
+
+                ctx.beginPath();
+                ctx.moveTo(lines[0].x, lines[0].y);
+                ctx.font = '12px Times';
+                ctx.strokeStyle='blue'
+                for (var i = 1; i < lines.length; i++) {
+                    let end = lines[i];
+                    if (i%3!==0&&i!==9) {
+                        ctx.lineTo(end.x, end.y+((centerY-end.y)/2))
+                    }else {
+                        ctx.lineTo(end.x, end.y)
+                    }
+                };
+                const Blength=getLenPx('报建线B',12)
+                ctx.fillText('报建线B',lines[1].x-Blength/2,lines[1].y+((centerY-lines[1].y)/2-8))
+                ctx.stroke();
+
+                ctx.font = '10px Times';
+                for(let i = 0;i < 7;i++){
+                    ctx.beginPath();
+                    ctx.arc(anW + (i+23)*singleW / 2,centerY-50, 5, 0, 2 * Math.PI, false);
+                    ctx.fillStyle = '#000';
+                    ctx.fill();
+                    ctx.beginPath();
+                    ctx.arc(anW + (i+23)*singleW / 2,centerY-50, 3, 0, 2 * Math.PI, false);
+                    // ctx.fillStyle = 'red';
+                    ctx.fill();
+                }
+
+
+                ctx.beginPath();
+                ctx.moveTo(lines[0].x, lines[0].y);
+                ctx.font = '12px Times'
+                ctx.strokeStyle='red'
+                ctx.lineTo(lines[lines.length-1].x, lines[lines.length-1].y)
+                const Clength=getLenPx('报建线C',12)
+                ctx.fillText('报建线C',lines[1].x-Clength/2,lines[1].y+((centerY-lines[1].y)-8))
+                ctx.stroke();
+                for(let i = 0;i < 3;i++){
+                    ctx.beginPath();
+                    ctx.arc(anW + (i+35)*singleW / 2,centerY, 5, 0, 2 * Math.PI, false);
+                    ctx.fillStyle = '#000';
+                    ctx.fill();
+                    ctx.beginPath();
+                    ctx.arc(anW + (i+35)*singleW / 2,centerY, 3, 0, 2 * Math.PI, false);
+                    // ctx.fillStyle = 'red';
+                    ctx.fill();
+                }
+
+
+                ctx.beginPath();
+                ctx.moveTo(linesBottom[0].x, linesBottom[0].y);
+                ctx.font = '12px Times'
+                ctx.strokeStyle='green'
+                for (var i = 1; i < linesBottom.length; i++) {
+                    let end = linesBottom[i];
+                    if (i%3!==0&&i!==6&&i!==9) {
+                        ctx.lineTo(end.x, end.y+((centerY-end.y)*1.7))
+                    }else {
+                        ctx.lineTo(end.x, end.y)
+                    }
+                };
+                // ctx.lineTo(lines[lines.length-1].x, lines[lines.length-1].y)
+                const Dlength=getLenPx('报建线D',12)
+                ctx.fillText('报建线D',linesBottom[1].x-Dlength/2,linesBottom[1].y+((centerY-linesBottom[1].y)*1.7+12))
+                ctx.stroke();
+                // for(let i = 0;i < 3;i++){
+                //     ctx.beginPath();
+                //     ctx.arc(anW + (i+35)*singleW / 2,centerY+50, 3, 0, 2 * Math.PI, false);
+                //     ctx.fillStyle = 'red';
+                //     ctx.fill();
+                // }
+            }
+
+        }
+
+    </script>
+</body>
+
+</html>
